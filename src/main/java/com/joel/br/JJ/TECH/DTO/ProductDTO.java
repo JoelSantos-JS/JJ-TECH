@@ -77,6 +77,10 @@ public class ProductDTO {
         return imgUrl;
     }
 
+    public Set<CategoryDTO> getCategories() {
+        return categories;
+    }
+
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
