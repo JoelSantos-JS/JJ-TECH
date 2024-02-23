@@ -1,29 +1,22 @@
 package com.joel.br.JJ.TECH.models;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @AllArgsConstructor
 @NoArgsConstructor
-@Table
+@Entity(name = "users")
 @Data
-@Entity
-public class Category {
+@Table(name = "users")
+public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-    @ManyToMany(mappedBy = "categories")
-    private Set<Product> products;
-
-    public Category(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    private String email;
+    private String password;
+    private Role role;
 }
