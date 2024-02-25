@@ -3,6 +3,7 @@ package com.joel.br.JJ.TECH.DTO;
 import com.joel.br.JJ.TECH.models.Category;
 import com.joel.br.JJ.TECH.models.Product;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ProductDTO {
@@ -14,7 +15,7 @@ public class ProductDTO {
     private Double price;
     private String imgUrl;
 
-    private Set<CategoryDTO> categories;
+    private Set<CategoryDTO> categories = new HashSet<>();
     public ProductDTO() {
     }
 

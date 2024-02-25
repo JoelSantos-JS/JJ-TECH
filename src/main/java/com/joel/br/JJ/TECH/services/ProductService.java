@@ -85,7 +85,7 @@ public class ProductService {
 
 
     public void  copyEntity(Product product, ProductDTO dto) {
-        product.setId(product.getId());
+        product.setId(dto.getId());
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());

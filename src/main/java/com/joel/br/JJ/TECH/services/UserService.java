@@ -3,7 +3,9 @@ package com.joel.br.JJ.TECH.services;
 import com.joel.br.JJ.TECH.DTO.RoleDTO;
 import com.joel.br.JJ.TECH.DTO.UserDTO;
 import com.joel.br.JJ.TECH.DTO.UserInsertDTO;
+import com.joel.br.JJ.TECH.models.Role;
 import com.joel.br.JJ.TECH.models.User;
+import com.joel.br.JJ.TECH.repository.RoleRepository;
 import com.joel.br.JJ.TECH.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +14,11 @@ public class UserService  {
 
 
     private final UserRepository  userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
 
@@ -38,8 +42,16 @@ public class UserService  {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
+        user.getRoles().clear();
 
-        user.getRoles().forEach(e -> userDTO.getRole().add(new RoleDTO(e)));
+
+
+        for(RoleDTO userDTO1 :  userDTO.getRoles()) {
+            Role category = roleRepository.getOne(userDTO1.getId());
+            user.getRoles().add(category);
+        }
+
+
     }
 
 

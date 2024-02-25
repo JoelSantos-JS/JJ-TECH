@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "tb_role")
+@Entity()
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_role")
+@Table()
 @Data
 public class Role {
     @Id

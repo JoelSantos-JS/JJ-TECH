@@ -12,7 +12,7 @@ public class UserDTO {
     private String name;
     private String email;
     private String password;
-    private Set<RoleDTO> role;
+    private Set<RoleDTO> roles;
 
     public UserDTO() {
 
@@ -34,13 +34,13 @@ public class UserDTO {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
-        user.getRoles().forEach(e -> this.role.add(new RoleDTO(e)));
+        user.getRoles().forEach(e -> this.roles.add(new RoleDTO(e)));
     }
 
 
     public UserDTO (User user , Set<Role> roles){
         this(user);
-           roles.forEach(e -> this.role.add(new RoleDTO(e)));
+           roles.forEach(e -> this.roles.add(new RoleDTO(e)));
     }
 
 }
