@@ -2,6 +2,7 @@ package com.joel.br.JJ.TECH.DTO;
 
 import com.joel.br.JJ.TECH.models.Category;
 import com.joel.br.JJ.TECH.models.Product;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,9 +11,14 @@ public class ProductDTO {
 
 
     private Long id;
+
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String description;
+    @NotEmpty
     private Double price;
+    @NotEmpty
     private String imgUrl;
 
     private Set<CategoryDTO> categories = new HashSet<>();

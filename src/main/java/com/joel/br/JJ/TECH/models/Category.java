@@ -2,6 +2,7 @@ package com.joel.br.JJ.TECH.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
     private String name;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")

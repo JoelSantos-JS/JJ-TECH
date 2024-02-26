@@ -2,6 +2,7 @@ package com.joel.br.JJ.TECH.controller;
 
 import com.joel.br.JJ.TECH.DTO.ProductDTO;
 import com.joel.br.JJ.TECH.services.ProductService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,13 +30,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> save(@RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> save(@Valid @RequestBody ProductDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(dto));
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO dto) {
         return ResponseEntity.status(HttpStatus.OK).body(service.update(id, dto));
     }
 

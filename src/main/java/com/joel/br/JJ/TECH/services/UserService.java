@@ -6,11 +6,17 @@ import com.joel.br.JJ.TECH.DTO.UserInsertDTO;
 import com.joel.br.JJ.TECH.models.Role;
 import com.joel.br.JJ.TECH.models.User;
 import com.joel.br.JJ.TECH.repository.RoleRepository;
+import com.joel.br.JJ.TECH.repository.UserDetailsProjection;
 import com.joel.br.JJ.TECH.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class UserService  {
+public class UserService implements UserDetailsService {
 
 
     private final UserRepository  userRepository;
@@ -55,4 +61,22 @@ public class UserService  {
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        List<UserDetailsProjection> result = userRepository.searchUsersAndRoleByEmail(username);
+        if(result.size() == 0) {
+            throw  new UsernameNotFoundException("user not found");
+        }
+
+        User user = new User();
+        user.setEmail(username);
+        user.setPassword(result.get(0).getPassword());
+
+        for(UserDetailsProjection us : result) {
+            user.addRole(new Role(us.getRoleId(), us.getAuthority()));
+        }
+
+
+        return user;
+    }
 }
