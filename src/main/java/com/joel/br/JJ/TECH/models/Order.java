@@ -18,7 +18,8 @@ import java.util.UUID;
 @Table
 @Data
 public class Order {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code = UUID.randomUUID().toString();
 
@@ -41,9 +42,18 @@ public class Order {
     @ManyToOne
     private FormPayment payment;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<ItemOrder> orders = new ArrayList<>();
+    private List<ItemOrder> items = new ArrayList<>();
 
 
+    public void calculateFinalPrice() {
+        getItems().forEach(ItemOrder::calculateTotalPrice);
+
+        this.subTotal = getItems().stream()
+                .map(item -> item.getTotalPrice())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.valueTotal = this.subTotal.add(this.feeShipping);
+    }
 
 
 }
