@@ -33,3 +33,17 @@ VALUES
 (1, 1), -- John Doe has the 'ROLE_USER' role
 (2, 1), -- Jane Smith has the 'ROLE_USER' role
 (2, 2); -- Jane Smith also has the 'ROLE_ADMIN' role
+
+INSERT INTO form_payment (description) VALUES
+('Credit Card'),
+('PayPal'),
+('Bank Transfer'),
+('Cash'),
+('PIX');
+-- Add more payment methods as needed
+;
+INSERT INTO item_order (id, quantity, unity_price, total_price)
+VALUES
+(1, 2, 10.00, 20.00),
+(2, 3, 15.50, 46.50);
+-- Add more records as needed

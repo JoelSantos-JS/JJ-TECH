@@ -5,6 +5,7 @@ import com.joel.br.JJ.TECH.models.User;
 import lombok.Data;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Data
 public class UserDTO {
@@ -26,7 +27,9 @@ public class UserDTO {
 
     }
 
-
+    public UserDTO(String email )  {
+        this.email = email;
+    }
 
 
 

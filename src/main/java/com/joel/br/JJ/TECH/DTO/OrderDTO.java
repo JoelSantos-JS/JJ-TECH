@@ -1,9 +1,11 @@
 package com.joel.br.JJ.TECH.DTO;
 
+import com.joel.br.JJ.TECH.models.ItemOrder;
 import com.joel.br.JJ.TECH.models.Order;
 import com.joel.br.JJ.TECH.models.OrderStatus;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +28,7 @@ public class OrderDTO {
     private FormPaymentDTO payment;
 
 
-    private List<ItemOrderDTO> items;
+    private List<ItemOrderDTO> items = new ArrayList<>();
 
     public OrderDTO() {
     }
@@ -49,8 +51,14 @@ public class OrderDTO {
         this.feeShipping = order.getFeeShipping();
         this.valueTotal = order.getValueTotal();
         this.status = order.getStatus();
-        this.user = new UserDTO(order.getUser());
         this.payment = new FormPaymentDTO(order.getPayment());
+        order.getItems().forEach(e -> this.items.add(new ItemOrderDTO(e)));
+    }
+
+    public OrderDTO(Order order , List<ItemOrder> items){
+        this(order);
+
+        items.forEach(e -> this.items.add(new ItemOrderDTO(e)));
     }
 
     public Long getId() {

@@ -1,15 +1,13 @@
 package com.joel.br.JJ.TECH.services;
 
-import com.joel.br.JJ.TECH.DTO.FormPaymentDTO;
-import com.joel.br.JJ.TECH.DTO.OrderDTO;
-import com.joel.br.JJ.TECH.DTO.UserDTO;
+import com.joel.br.JJ.TECH.DTO.*;
 import com.joel.br.JJ.TECH.exceptions.ItemOrderException;
 import com.joel.br.JJ.TECH.exceptions.OrderNotFoundException;
 import com.joel.br.JJ.TECH.models.*;
 import com.joel.br.JJ.TECH.repository.FormPaymentRepository;
+import com.joel.br.JJ.TECH.repository.ItemOrderRepository;
 import com.joel.br.JJ.TECH.repository.OrderRepository;
-import jakarta.servlet.http.PushBuilder;
-import org.aspectj.weaver.ast.Or;
+import com.joel.br.JJ.TECH.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,13 +23,19 @@ import java.util.UUID;
 public class OrderServices {
 
     private final OrderRepository repository;
+    private final ItemOrderRepository itemOrderRepository;
     private final FormPaymentRepository formPaymentRepository;
+
+    private final UserRepository userRepository;
+
 
     private final UserService userService;
 
-    public OrderServices(OrderRepository repository, FormPaymentRepository formPaymentRepository, UserService userService) {
+    public OrderServices(OrderRepository repository, ItemOrderRepository itemOrderRepository, FormPaymentRepository formPaymentRepository, UserRepository userRepository, UserService userService) {
         this.repository = repository;
+        this.itemOrderRepository = itemOrderRepository;
         this.formPaymentRepository = formPaymentRepository;
+        this.userRepository = userRepository;
         this.userService = userService;
     }
 
@@ -70,7 +74,6 @@ public class OrderServices {
         FormPayment formPayment = formPaymentRepository.findById(orderDTO.getPayment().getId()).orElseThrow(() -> new OrderNotFoundException("order not found"));
 
         orderDTO.setPayment(new FormPaymentDTO(formPayment));
-        orderDTO.setUser((UserDTO) user);
         orderDTO.setFeeShipping(BigDecimal.valueOf(10));
         orderDTO.setStatus(OrderStatus.PENDING);
         orderDTO.setCode(UUID.randomUUID().toString());
@@ -78,15 +81,30 @@ public class OrderServices {
         return orderDTO;
     }
 
-    public void copyEntity(Order order , OrderDTO orderDTO) {
-        FormPayment formPayment = formPaymentRepository.findById(orderDTO.getPayment().getId()).orElseThrow(() -> new OrderNotFoundException("order not found"));
+    public void copyEntity(Order order, OrderDTO orderDTO) {
+        // 1. Consulte o FormPayment pelo ID
+        FormPayment formPayment = formPaymentRepository.findById(orderDTO.getPayment().getId())
+                .orElseThrow(() -> new OrderNotFoundException("FormPayment not found"));
+
+        // 2. Obtenha diretamente a entidade User do banco de dados pelo ID ou outro identificador exclusivo
+        User user = userRepository.findById(orderDTO.getUser().getId())
+                .orElseThrow(() -> new OrderNotFoundException("User not found"));
+
+        // 3. Copie os valores da OrderDTO para a Order
         order.setId(orderDTO.getId());
         order.setCode(orderDTO.getCode());
+        order.setSubTotal(orderDTO.getSubTotal());
+        order.setValueTotal(orderDTO.getValueTotal());
         order.setFeeShipping(orderDTO.getFeeShipping());
         order.setStatus(orderDTO.getStatus());
         order.setPayment(formPayment);
+        order.setUser(user);  // Use a entidade User diretamente
         order.setCreateDate(Instant.now());
         order.setFeeShipping(orderDTO.getFeeShipping());
+
+
+
+
     }
 
     public List<ItemOrder> validateAndUpdateItems(Order order) {

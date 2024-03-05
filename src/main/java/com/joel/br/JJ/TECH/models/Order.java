@@ -15,23 +15,30 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table
+@Table(name = "orders")
 @Data
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code = UUID.randomUUID().toString();
-
+    @Column(name = "sub_total")
     private BigDecimal subTotal;
-
+    @Column(name = "fee_shipping")
     private BigDecimal feeShipping;
+
+    @Column(name = "value_total")
     private BigDecimal valueTotal;
 
     @CreationTimestamp
+    @Column(name = "created_date", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant createDate;
+    @Column(name = "confirmation_date", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant confirmationDate;
+    @Column(name = "cancellation_date", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant cancellationDate;
+    @Column(name = "delivery_date", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @CreationTimestamp
     private Instant deliveryDate;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -53,6 +60,12 @@ public class Order {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         this.valueTotal = this.subTotal.add(this.feeShipping);
+    }
+
+
+    public void addItem(ItemOrder itemOrder) {
+        items.add(itemOrder);
+        itemOrder.setOrder(this);
     }
 
 
